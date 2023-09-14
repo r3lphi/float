@@ -15,6 +15,9 @@ class GameplayState(State):
 
         self.player = Player()
 
+        import World
+        World.import_screen(coords=(0, 0))
+
     def update(self, dt):
         self.player.update(dt)
     
