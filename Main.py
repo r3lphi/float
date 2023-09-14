@@ -36,7 +36,7 @@ while(isRunning):
             if event.key == pygame.K_F11:
                 toggle_fullscreen()
     
-    dt = clock.tick(frame_rate) * 0.001
+    dt = clock.tick(frame_rate) / 1000
     # print(clock.get_fps())
 
     active_state.update(dt)
