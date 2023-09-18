@@ -1,6 +1,8 @@
 import pygame
 from pygame import time
 from States import *
+import AssetsHandler
+import KeyHandler
 
 from pygame.constants import SCALED
 
@@ -8,9 +10,11 @@ pygame.init()
 
 pygame.display.set_caption("Float")
 
-surface_size = (360, 640)
+SURFACE_SIZE = (640, 360)
 
-surface = pygame.display.set_mode(surface_size, SCALED, vsync=1)
+surface = pygame.display.set_mode(SURFACE_SIZE, SCALED, vsync=1)
+
+AssetsHandler.Init()
 
 isRunning = 1
 clock = pygame.time.Clock()
@@ -26,20 +30,18 @@ states = {
 active_state = states["GAMEPLAY"]
 
 def toggle_fullscreen():
+    from pygame.constants import FULLSCREEN
     if not pygame.display.is_fullscreen():
-        surface = pygame.display.set_mode((0, 0), SCALED, vsync=1)
+        surface = pygame.display.set_mode(SURFACE_SIZE, FULLSCREEN | SCALED, vsync=1)
         return
     
-    surface = pygame.display.set_mode(surface_size, SCALED, vsync=1)
+    surface = pygame.display.set_mode(SURFACE_SIZE, SCALED, vsync=1)
 
 while(isRunning):
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            isRunning = 0
-        # if event.type == pygame.KEYDOWN:
-        #     if event.key == pygame.K_F11:
-        #         toggle_fullscreen()
+    KeyHandler.update()
 
+    if KeyHandler.check(pygame.K_F11):
+        toggle_fullscreen()
 
     clock.tick(frame_rate)
 

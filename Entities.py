@@ -4,6 +4,7 @@ from pygame.sprite import Group, Sprite
 from pygame.rect import Rect
 from pygame.math import clamp
 from ImageHandler import Spritesheet
+from AssetsHandler import img_dict
 
 class AnimationFrame():
     def __init__(self, image, length):
@@ -21,8 +22,13 @@ class AnimableSprite(Sprite):
         self.animation = starting_animation
         self.timer = 0
         self.frame_index = 0
+
+        if starting_animation:
+            self.image = starting_animation.frames[0].image
+            self.rect = self.image.get_rect()
     
     def update(self, dt):
+        print("Updating!")
         if not self.animation:
             return
         
@@ -38,31 +44,27 @@ class AnimableSprite(Sprite):
 
 class Player(Group):
     def __init__(self, starting_pos = pygame.Vector2(0, 0)):
-        self.sprite_sheet = Spritesheet(filename="player.png")
-
         self.rect = Rect(starting_pos, (16, 16))
 
         a_char_bob = Animation([
-            AnimationFrame(self.sprite_sheet.cut(Rect(0, 0, 16, 16)), 0.5),
-            AnimationFrame(self.sprite_sheet.cut(Rect(16, 0, 16, 16)), 0.5)
+            AnimationFrame(img_dict["player_char_idle_0"], 0.5),
+            AnimationFrame(img_dict["player_char_idle_1"], 0.5)
         ])
 
         self.s_char = AnimableSprite(a_char_bob)
-        self.s_char.image = self.sprite_sheet.cut(Rect(0, 0, 16, 16))
-        self.s_char.rect = self.s_char.image.get_rect()
 
         self.s_balloon = AnimableSprite()
-        self.s_balloon.image = self.sprite_sheet.cut(Rect(0, 16, 16, 16))
+        self.s_balloon.image = img_dict["player_balloon_idle_0"]
         self.s_balloon.rect = self.s_balloon.image.get_rect()
 
         super().__init__([self.s_char, self.s_balloon])
 
         self.moveSpeed = 10
 
-        from Main import surface_size
+        from Main import SURFACE_SIZE
         self.position = starting_pos if starting_pos != pygame.Vector2(0, 0) else pygame.Vector2(
-            (surface_size[0] / 2) - (self.rect.width / 2),
-            surface_size[1] - self.rect.height * 2
+            (SURFACE_SIZE[0] / 2) - (self.rect.width / 2),
+            SURFACE_SIZE[1] - self.rect.height * 2
         )
 
         self.velocity = pygame.Vector2(0, 0)
@@ -87,9 +89,14 @@ class Player(Group):
                 directionChanged = 1
             self.lastDirection = direction
 
-        self.velocity.x += self.moveSpeed * direction * dt
+        frame_velocity = self.moveSpeed * direction * dt
+        
+        if keys[pygame.K_s]:
+            self.velocity.x = pygame.math.lerp(self.velocity.x, 0, 2 * dt)
+        else:
+            self.velocity.x += frame_velocity
 
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_w]:
             self.velocity.x = 2 * -self.lastDirection
 
         self.position.x += self.velocity.x

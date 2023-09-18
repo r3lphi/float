@@ -19,14 +19,14 @@ def scale_with_screen(image, newRes, oldRes):
 class Spritesheet:
     def __init__(self, image = None, filename = None):
         self.sheet = image if image else load_image(filename) if filename else pygame.Surface((50, 50))
-    def cut(self, rect, scale = 1, colorkey = None):
+    def cut(self, rect, scale = 1, colorkey = -1):
         image = pygame.Surface(rect.size).convert()
         image.blit(self.sheet, (0, 0), rect)
 
         if scale != 1:
             image = rescale(image, scale)
 
-        if not colorkey:
+        if colorkey == -1:
             colorkey = image.get_at((0, 0))
         image.set_colorkey(colorkey, pygame.RLEACCEL)
 
