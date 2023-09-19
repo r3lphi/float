@@ -6,7 +6,7 @@ from Debugging import MapEditor
 class State:
     def __init__(self):
         pass
-    def update(dt):
+    def update(dt, events):
         pass
     def draw(surface):
         pass
@@ -21,14 +21,14 @@ class GameplayState(State):
         self.isEditMode = True
         self.map_editor = MapEditor(self.screen)
 
-    def update(self, dt):
-        self.screen.update(dt)
+    def update(self, dt, events):
+        self.screen.update(dt, events)
         
         if self.isEditMode:
-            self.map_editor.update(dt)
+            self.map_editor.update(dt, events)
             return
         
-        self.player.update(dt)
+        self.player.update(dt, events)
     
     def draw(self, surface):
         self.screen.draw(surface)
