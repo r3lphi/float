@@ -16,7 +16,7 @@ class GameplayState(State):
         super().__init__()
 
         self.player = Player()
-        self.screen = Screen((0, 0))
+        self.screen = Screen((0, 0), True)
 
         self.isEditMode = False
         self.map_editor = MapEditor(self.screen)
