@@ -2,7 +2,6 @@ import pygame
 from pygame import time
 from States import *
 import AssetsHandler
-from Events import EventHandler
 
 from pygame.constants import SCALED
 
@@ -37,12 +36,10 @@ def toggle_fullscreen():
     
     surface = pygame.display.set_mode(SURFACE_SIZE, SCALED, vsync=1)
 
-eventHandler = EventHandler()
-
 while(isRunning):
-    eventHandler.update()
+    events = pygame.event.get()
 
-    for event in eventHandler.events:
+    for event in events:
         if event.type == pygame.QUIT:
             isRunning = 0
 
@@ -52,8 +49,8 @@ while(isRunning):
     dt = (now - last_time) / 1000
     last_time = now
 
-    active_state.update(dt, eventHandler.events)
-
+    active_state.update(dt, events)
+    
     # print(clock.get_fps())
 
     surface.fill("cyan")

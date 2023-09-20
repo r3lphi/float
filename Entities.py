@@ -78,7 +78,7 @@ class Player(Group):
             return -1
         return 0
     
-    def update(self, dt):
+    def update(self, dt, events):
         keys = pygame.key.get_pressed()
 
         direction = self.get_direction(keys)

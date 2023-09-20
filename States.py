@@ -18,10 +18,15 @@ class GameplayState(State):
         self.player = Player()
         self.screen = Screen((0, 0))
 
-        self.isEditMode = True
+        self.isEditMode = False
         self.map_editor = MapEditor(self.screen)
 
     def update(self, dt, events):
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F3:
+                    self.isEditMode = not self.isEditMode
+
         self.screen.update(dt, events)
         
         if self.isEditMode:
