@@ -9,7 +9,7 @@ pygame.init()
 
 pygame.display.set_caption("Float")
 
-SURFACE_SIZE = (640, 360)
+SURFACE_SIZE = (320, 180)
 
 surface = pygame.display.set_mode(SURFACE_SIZE, SCALED, vsync=1)
 
@@ -42,6 +42,10 @@ while(isRunning):
     for event in events:
         if event.type == pygame.QUIT:
             isRunning = 0
+        if event.type == pygame.KEYDOWN:
+            match event.key:
+                case pygame.K_F11:
+                    toggle_fullscreen()
 
     clock.tick(frame_rate)
 

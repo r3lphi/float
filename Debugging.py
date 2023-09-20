@@ -1,5 +1,5 @@
 import pygame
-from AdvancedRendering import draw_text
+from TextRenderer import draw_text
 from WorldTypes import create_tile
 from AssetsHandler import tile_dict
 from pygame.sprite import DirtySprite
@@ -29,7 +29,11 @@ class MapEditor:
 
                 self.screen.add(tile)
 
-                self.ghostTile.position += self.lastDirection
+                self.ghostTile.position += self.lastDirection if self.lastDirection else pygame.Vector2(0, 0)
+            if event.key == pygame.K_F7:
+                from WorldTypes import export_screen
+                export_screen(self.screen)
+
             if event.key == pygame.K_UP and self.ghostTile:
                 self.ghostTile.position.y -= 8
                 self.lastDirection = pygame.Vector2(0, -8)
@@ -47,7 +51,7 @@ class MapEditor:
         from Main import SURFACE_SIZE
 
         draw_text(surface, "EDIT MODE", (SURFACE_SIZE[0] - 50, 20))
-        draw_text(surface, str(self.ghostTile), (SURFACE_SIZE[0] - 50, 40))
+        draw_text(surface, str(self.ghostTile.id if self.ghostTile else "None"), (SURFACE_SIZE[0] - 50, 40))
 
         if not self.ghostTile:
             return
