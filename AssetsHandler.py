@@ -21,3 +21,6 @@ def Init():
     
     img_dict["rock"] = sheet_tiles.cut(Rect(0, 0, 8, 8), colorkey=None)
     tile_dict[0] = img_dict["rock"]
+
+    img_dict["steel"] = sheet_tiles.cut(Rect(8, 0, 8, 8), colorkey=None)
+    tile_dict[1] = img_dict["steel"]

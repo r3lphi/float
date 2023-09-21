@@ -28,7 +28,6 @@ class AnimableSprite(Sprite):
             self.rect = self.image.get_rect()
     
     def update(self, dt):
-        print("Updating!")
         if not self.animation:
             return
         
@@ -67,7 +66,7 @@ class Player(Group):
             SURFACE_SIZE[1] - self.rect.height * 2
         )
 
-        self.velocity = pygame.Vector2(0, 0)
+        self.velocity = pygame.Vector2(0, -1)
 
         self.lastDirection = 0
 
@@ -99,7 +98,8 @@ class Player(Group):
         if keys[pygame.K_w]:
             self.velocity.x = 2 * -self.lastDirection
 
-        self.position.x += self.velocity.x
+        self.position += self.velocity
+
         self.rect.x = round(self.position.x)
         self.rect.y = round(self.position.y)
         

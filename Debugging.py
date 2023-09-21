@@ -11,7 +11,14 @@ class GhostTile:
         self.lastMovedBy = pygame.Vector2(0, 0)
         self.highlightColor = "blue"
     def move(self, move_by, screen):
-        self.position += move_by
+        from Main import SURFACE_SIZE
+
+        futurePos = self.position + move_by
+        
+        if (futurePos.x < 0 or futurePos.x >= SURFACE_SIZE[0]) or (futurePos.y < 0 or futurePos.y > SURFACE_SIZE[1]):
+            return
+
+        self.position = futurePos
         self.lastMovedBy = move_by
 
         self.highlightColor = "red" if screen.get_at(self.position) else "blue"
@@ -42,6 +49,10 @@ class MapEditor:
             if event.key == pygame.K_F7:
                 from WorldTypes import export_screen
                 export_screen(self.screen)
+            if event.key == pygame.K_SPACE:
+                self.ghostTile.id = (self.ghostTile.id + 1) % len(tile_dict)
+            if event.key == pygame.K_F9:
+                self.screen.empty()
             
             if not self.ghostTile:
                 return
@@ -55,6 +66,7 @@ class MapEditor:
                     self.ghostTile.move(pygame.Vector2(-8, 0), self.screen)
                 case pygame.K_RIGHT:
                     self.ghostTile.move(pygame.Vector2(8, 0), self.screen)
+
     def render(self, surface):
         from Main import SURFACE_SIZE
 
