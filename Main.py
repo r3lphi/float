@@ -57,7 +57,7 @@ while(isRunning):
     
     # print(clock.get_fps())
 
-    surface.fill("cyan")
+    surface.fill("#F3B05A")
     active_state.draw(surface)
     pygame.display.flip()
 

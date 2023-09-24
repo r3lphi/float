@@ -37,14 +37,24 @@ def create_tile(id, tiledPosition = pygame.Vector2(0, 0)):
     return tile
 
 class Screen(Group):
-    def __init__(self, world_coords, use_exported = False) -> None:
-        self.file_dir = f"{world_coords[0]}_{world_coords[1]}.txt" if not use_exported else "exported_screen.txt"
+    def __init__(self, coords, use_exported = False) -> None:
+        self.file_dir = f"{int(coords[0])}_{int(coords[1])}.txt" if not use_exported else "exported_screen.txt"
         
         super().__init__(import_screen(self.file_dir))
 
-        self.world_coords = world_coords
-    def draw(self, surface):
-        super().draw(surface)
+        from Main import SURFACE_SIZE
+
+        self.simplifiedCoords = coords
+        self.worldCoords = pygame.Vector2(SURFACE_SIZE[0] * self.simplifiedCoords[0], SURFACE_SIZE[1] * -self.simplifiedCoords[1])
+
+    def draw(self, surface, globalOffset):
+        for sprite in self.sprites():
+            surface.blit(sprite.image, Rect(
+                sprite.rect.x + self.worldCoords.x + globalOffset.x,
+                sprite.rect.y + self.worldCoords.y + globalOffset.y,
+                sprite.rect.width,
+                sprite.rect.height
+            ))
         # for sprite in self.sprites():
         #     pygame.draw.rect(surface, "red", sprite.rect, 1)
     def get_at(self, position: pygame.Vector2):
@@ -55,16 +65,18 @@ class Screen(Group):
         self.empty()
         self.add(import_screen(self.file_dir))
 
+def tile_to_id(sprite):
+    inverted_tile_dict = list(tile_dict.values())
+    return inverted_tile_dict.index(sprite.image) if sprite else -1
+
 def export_screen(screen: Screen):
     with open('leveldat/exported_screen.txt', 'w') as f:
-        inverted_tile_dict = list(tile_dict.values())
-
         for y in range(TILESCREEN_HEIGHT):
             row = ""
             
             for x in range(TILESCREEN_WIDTH):
                 tile = screen.get_at(pygame.Vector2(x * 8, y * 8))
-                id = inverted_tile_dict.index(tile.image) if tile else -1
+                id = tile_to_id(tile)
 
                 row += f"{id},"
             
