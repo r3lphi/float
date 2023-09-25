@@ -67,13 +67,14 @@ class Object(Sprite):
 
 class Camera:
     def __init__(self, starting_vec, follow_speed):
-        self.position = starting_vec
+        self.origin = starting_vec
+        self.position = self.origin
         self.follow_speed = follow_speed
     def update(self, dt, target_vec):
         from pygame.math import lerp
         self.position = pygame.Vector2(
-            lerp(self.position.x, target_vec.x, self.follow_speed * dt),
-            lerp(self.position.y, target_vec.y, self.follow_speed * dt),
+            lerp(self.position.x, target_vec.x + self.origin.x, self.follow_speed * dt),
+            lerp(self.position.y, target_vec.y + self.origin.y, self.follow_speed * dt),
         )
 
 class Player(Group):
@@ -91,6 +92,8 @@ class Player(Group):
         self.s_charcacter = AnimableSprite(self.a_idle)
 
         super().__init__([self.s_charcacter])
+
+        self.coordinates = pygame.Vector2(0, 0)
 
         self.moveSpeed = 5
 
