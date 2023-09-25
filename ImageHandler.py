@@ -5,17 +5,6 @@ def load_image(filename):
 
     return image
 
-def rescale(image, scale):
-    return pygame.transform.scale(image, (image.get_size()[0] * scale, image.get_size()[1] * scale))
-
-def scale_with_screen(image, newRes, oldRes):
-    sw = newRes[0] / oldRes[0]
-    sh = newRes[1] / oldRes[1]
-
-    print((sw, sh))
-
-    return pygame.transform.scale(image, (image.get_size()[0] * sw, image.get_size()[1] * sh))
-
 class Spritesheet:
     def __init__(self, image = None, filename = None):
         self.sheet = image if image else load_image(filename) if filename else pygame.Surface((50, 50))
@@ -24,7 +13,7 @@ class Spritesheet:
         image.blit(self.sheet, (0, 0), rect)
 
         if scale != 1:
-            image = rescale(image, scale)
+            image = pygame.transform.scale(image, (image.get_width() * scale, image.get_height() * scale))
 
         if colorkey == -1:
             colorkey = image.get_at((0, 0))

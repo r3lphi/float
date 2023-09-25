@@ -28,9 +28,6 @@ class GameplayState(State):
         self.globalScreenOffset = pygame.Vector2(0, 0)
         
         self.map_editor = MapEditor(self.primaryScreen)
-
-        from Effects import Fader
-        self.fader = Fader()
     
     def begin_scene_transition(self, dif, player_relocation):
         self.simplifiedCoords += dif
@@ -86,12 +83,6 @@ class GameplayState(State):
             self.additiveScreen.update(dt, events)
         
         if self.player.isDead:
-            from Main import SURFACE_SIZE
-            if self.deathDummy.rect.y > SURFACE_SIZE[1] and not self.fader.isFading:
-                self.fader.activate(8, 1)
-            
-            self.fader.update(dt)
-
             return
 
         if self.player.collisionSubject:
@@ -132,9 +123,6 @@ class GameplayState(State):
             return
 
         if self.player.isDead:
-            if self.fader.isFading:
-                self.fader.draw(surface)
-
             return
 
         self.player.draw(surface)
